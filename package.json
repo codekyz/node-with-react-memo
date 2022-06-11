@@ -1,0 +1,23 @@
+{
+  "name": "node-with-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codekyz/node-with-react.git"
+  },
+  "author": "codekyz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codekyz/node-with-react/issues"
+  },
+  "homepage": "https://github.com/codekyz/node-with-react#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
