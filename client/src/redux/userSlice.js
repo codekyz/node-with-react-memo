@@ -9,10 +9,19 @@ export const requestUserLogin = createAsyncThunk(
   }
 );
 
+export const requestUserRegister = createAsyncThunk(
+  "user/requestUserRegister",
+  async (payload) => {
+    const response = await axios.post("/api/users/register", payload);
+    return response.data;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: {},
+    login: {},
+    register: {},
   },
   reducers: {
     // loginUser: (state, action) => {
@@ -24,7 +33,10 @@ const userSlice = createSlice({
   },
   extraReducers: {
     [requestUserLogin.fulfilled]: (state, action) => {
-      return { ...state, user: action.payload };
+      return { ...state, login: action.payload };
+    },
+    [requestUserRegister.fulfilled]: (state, action) => {
+      return { ...state, register: action.payload };
     },
   },
 });
