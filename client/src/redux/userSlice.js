@@ -17,11 +17,20 @@ export const requestUserRegister = createAsyncThunk(
   }
 );
 
+export const requestUserAuth = createAsyncThunk(
+  "user/requestUserAuth",
+  async () => {
+    const response = await axios.get("/api/users/auth");
+    return response.data;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
     login: {},
     register: {},
+    userData: {},
   },
   reducers: {
     // loginUser: (state, action) => {
@@ -37,6 +46,9 @@ const userSlice = createSlice({
     },
     [requestUserRegister.fulfilled]: (state, action) => {
       return { ...state, register: action.payload };
+    },
+    [requestUserAuth.fulfilled]: (state, action) => {
+      return { ...state, userData: action.payload };
     },
   },
 });

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Auth from "../../../hoc/auth";
 import { useDispatch } from "react-redux";
 import { requestUserRegister } from "../../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -86,4 +87,4 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+export default Auth(RegisterPage);

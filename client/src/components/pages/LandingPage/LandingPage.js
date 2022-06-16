@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
+import Auth from "../../../hoc/auth";
 import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios.get("/api/hello").then((response) => console.log(response));
-  }, []);
+  // useEffect(() => {
+  //   axios.get("/api/hello").then((response) => console.log(response));
+  // }, []);
 
   const onClickHandler = () => {
     axios.get("/api/users/logout").then((response) => {
@@ -36,4 +37,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default Auth(LandingPage, null);
