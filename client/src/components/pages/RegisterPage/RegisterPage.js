@@ -87,4 +87,4 @@ function RegisterPage() {
   );
 }
 
-export default Auth(RegisterPage);
+export default Auth(RegisterPage, false);
