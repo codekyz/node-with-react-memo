@@ -15,6 +15,9 @@ function Navbar() {
         <Link style={{ marginRight: 20 }} to="/">
           Home
         </Link>
+        <Link style={{ marginRight: 20 }} to="/memo">
+          Memo
+        </Link>
         <Link style={{ marginRight: 20 }} to="/register">
           Register
         </Link>

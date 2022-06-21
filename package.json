@@ -1,5 +1,5 @@
 {
-  "name": "node-with-react",
+  "name": "node-with-react-memo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codekyz/node-with-react.git"
+    "url": "git+https://github.com/codekyz/node-with-react-memo.git"
   },
   "author": "codekyz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/codekyz/node-with-react/issues"
+    "url": "https://github.com/codekyz/node-with-react-memo/issues"
   },
-  "homepage": "https://github.com/codekyz/node-with-react#readme",
+  "homepage": "https://github.com/codekyz/node-with-react-memo#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
