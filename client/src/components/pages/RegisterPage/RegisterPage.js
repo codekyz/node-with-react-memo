@@ -36,7 +36,7 @@ function RegisterPage() {
       return alert("비밀번호가 같지 않습니다.");
     }
 
-    let body = {
+    const body = {
       email: email,
       password: password,
       name: name,

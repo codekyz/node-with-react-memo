@@ -9,6 +9,7 @@ function Navbar() {
         zIndex: 1,
         width: "100%",
         borderBottom: "1px solid gray",
+        background: "#ffffff",
       }}
     >
       <nav style={{ display: "flex", padding: 20 }}>
