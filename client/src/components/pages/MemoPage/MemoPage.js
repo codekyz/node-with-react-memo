@@ -69,7 +69,7 @@ function MemoPage() {
           display: "flex",
           justifyContent: "center",
           alignItems: "flex-start",
-          width: "700px",
+          width: "70%",
         }}
         onFinish={onSubmitHandler}
       >

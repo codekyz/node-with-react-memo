@@ -1,20 +1,39 @@
 import React from "react";
+import { Card, Button } from "antd";
 
 function Memo({ props }) {
+  const onClickHandler = () => {};
   return (
-    <div
+    <Card
       style={{
-        paddingTop: 20,
-        paddingBottom: 20,
-        width: 650,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
+        marginTop: 20,
+        width: "70%",
       }}
     >
-      <div>{props.memo}</div>
-      <div>작성자 : {props.writer.name}</div>
-    </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <div>{props.memo}</div>
+          <div>작성자 : {props.writer.name}</div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div>응원 수 : {props.cheer}</div>
+          <Button onClick={onClickHandler}>응원하기</Button>
+        </div>
+      </div>
+    </Card>
   );
 }
 
