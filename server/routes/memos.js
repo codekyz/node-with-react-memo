@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const { Memo } = require("../models/Memo");
 
@@ -19,6 +20,16 @@ router.post("/data", (req, res) => {
     .exec((err, memoInfo) => {
       if (err) return res.status(400).json({ success: false, err });
       return res.status(200).json({ success: true, memoInfo });
+    });
+});
+
+router.post("/mymemo", (req, res) => {
+  let o_id = new ObjectId(req.body.id);
+  Memo.find({ writer: o_id })
+    .populate("writer")
+    .exec((err, myMemos) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, myMemos });
     });
 });
 

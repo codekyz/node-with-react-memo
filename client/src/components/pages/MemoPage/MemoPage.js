@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Auth from "../../../hoc/auth";
-import { Typography, Button, Form, Input } from "antd";
+import { Typography, Button, Form, Input, Checkbox } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -14,19 +14,39 @@ function MemoPage() {
 
   const [memo, setMemo] = useState("");
   const [memos, setMemos] = useState([]);
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
-    axios.post("/api/memos/data").then((response) => {
-      if (response.data.success) {
-        setMemos(response.data.memoInfo);
-      } else {
-        alert("메모를 가져오는데 실패했습니다.");
-      }
-    });
-  }, []);
+    if (!toggle) {
+      axios.post("/api/memos/data").then((response) => {
+        if (response.data.success) {
+          setMemos(response.data.memoInfo);
+        } else {
+          alert("메모를 가져오는데 실패했습니다.");
+        }
+      });
+    }
+
+    if (toggle) {
+      const body = {
+        id: user.userData._id,
+      };
+      axios.post("/api/memos/mymemo", body).then((response) => {
+        if (response.data.success) {
+          setMemos(response.data.myMemos);
+        } else {
+          alert("내 메모를 가져오는데 실패했습니다.");
+        }
+      });
+    }
+  }, [toggle, user]);
 
   const onMemoHandler = (event) => {
     setMemo(event.currentTarget.value);
+  };
+
+  const onCheckBoxHandler = () => {
+    setToggle(!toggle);
   };
 
   const onSubmitHandler = () => {
@@ -76,6 +96,13 @@ function MemoPage() {
         <Input type="text" value={memo} onChange={onMemoHandler} />
         <Button htmlType="submit">등록</Button>
       </Form>
+      <Checkbox
+        style={{ width: "70%" }}
+        checked={toggle}
+        onClick={onCheckBoxHandler}
+      >
+        내 메모만 보기
+      </Checkbox>
       {memos.map((item) => (
         <Memo key={item._id} props={item} />
       ))}
