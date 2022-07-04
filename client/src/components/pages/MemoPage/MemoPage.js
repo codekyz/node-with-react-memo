@@ -18,7 +18,7 @@ function MemoPage() {
 
   useEffect(() => {
     if (!toggle) {
-      axios.post("/api/memos/data").then((response) => {
+      axios.post("/api/memos/all").then((response) => {
         if (response.data.success) {
           setMemos(response.data.memoInfo);
         } else {

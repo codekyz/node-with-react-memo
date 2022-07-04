@@ -6,9 +6,6 @@ const cookieParser = require("cookie-parser");
 
 const config = require("./config/key");
 
-const { auth } = require("./middleware/auth");
-const { User } = require("./models/User");
-
 const mongoose = require("mongoose");
 mongoose
   .connect(config.mongoURI, {
@@ -32,6 +29,7 @@ app.use(cookieParser());
 
 app.use("/api/users", require("./routes/users"));
 app.use("/api/memos", require("./routes/memos"));
+app.use("/api/cheers", require("./routes/cheers"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

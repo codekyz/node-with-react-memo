@@ -13,7 +13,7 @@ router.post("/", (req, res) => {
   });
 });
 
-router.post("/data", (req, res) => {
+router.post("/all", (req, res) => {
   // memos collection에 들어있는 모든 정보를 가져오기
   Memo.find()
     .populate("writer")
@@ -31,6 +31,15 @@ router.post("/mymemo", (req, res) => {
       if (err) return res.status(400).json({ success: false, err });
       return res.status(200).json({ success: true, myMemos });
     });
+});
+
+router.put("/update", (req, res) => {
+  Memo.findByIdAndUpdate(req.body.memo, { $inc: { cheer: 1 } }).exec(
+    (err, memoInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, memoInfo });
+    }
+  );
 });
 
 module.exports = router;

@@ -14,8 +14,8 @@ router.post("/", (req, res) => {
 });
 
 router.get("/cancel", (req, res) => {
-  let o_user_id = new ObjectId(req.body.user_id);
-  let o_memo_id = new ObjectId(req.body.memo_id);
+  let o_user_id = new ObjectId(req.body.user);
+  let o_memo_id = new ObjectId(req.body.memo);
   Cheer.deleteOne({ user: o_user_id, memo: o_memo_id }).exec((err) => {
     if (err) return res.status(400).json({ success: false, err });
     return res.status(200).send({ success: true });
