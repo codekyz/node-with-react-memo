@@ -14,7 +14,7 @@ router.post("/", (req, res) => {
 });
 
 router.post("/data", (req, res) => {
-  // memos collection에 들어있는 모든 상품 정보를 가져오기
+  // memos collection에 들어있는 모든 정보를 가져오기
   Memo.find()
     .populate("writer")
     .exec((err, memoInfo) => {

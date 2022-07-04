@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Button } from "antd";
 
 function Memo({ props }) {
-  const onClickHandler = () => {};
+  const [cheer, setCheer] = useState(false);
+
+  const onClickHandler = () => {
+    setCheer(!cheer);
+  };
   return (
     <Card
       style={{
