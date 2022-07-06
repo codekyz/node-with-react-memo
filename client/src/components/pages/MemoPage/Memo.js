@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Card, Button } from "antd";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 function Memo({ props }) {
   const user = useSelector((state) => state.user);
