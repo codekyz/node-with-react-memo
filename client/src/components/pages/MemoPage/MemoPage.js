@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import Auth from "../../../hoc/auth";
 import { Typography, Button, Form, Input, Checkbox } from "antd";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Memo from "./Memo";
 
 const { Title } = Typography;
 
 function MemoPage() {
-  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
 
   const [memo, setMemo] = useState("");
@@ -65,7 +63,6 @@ function MemoPage() {
     axios.post("/api/memos", body).then((response) => {
       if (response.data.success) {
         alert("등록 성공");
-        navigate("/memo");
       } else {
         alert("등록 실패");
       }

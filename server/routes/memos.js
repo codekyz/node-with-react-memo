@@ -17,6 +17,7 @@ router.post("/", (req, res) => {
 router.post("/all", (req, res) => {
   // memos collection에 들어있는 모든 정보를 가져오기
   Memo.find()
+    .sort("-createdAt")
     .populate("writer")
     .exec((err, memoInfo) => {
       if (err) return res.status(400).json({ success: false, err });
@@ -27,6 +28,7 @@ router.post("/all", (req, res) => {
 router.post("/mymemo", (req, res) => {
   let o_id = new ObjectId(req.body.id);
   Memo.find({ writer: o_id })
+    .sort("-createdAt")
     .populate("writer")
     .exec((err, myMemos) => {
       if (err) return res.status(400).json({ success: false, err });
