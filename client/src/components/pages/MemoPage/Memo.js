@@ -3,20 +3,8 @@ import { Card, Button } from "antd";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function Memo({ props }) {
+function Memo({ props, isClicked }) {
   const user = useSelector((state) => state.user);
-
-  const [cheer, setCheer] = useState(false);
-
-  useEffect(() => {
-    axios.post("/api/cheers/search", { memo: props._id }).then((response) => {
-      if (response.data.success) {
-        setCheer(true);
-      } else {
-        setCheer(false);
-      }
-    });
-  }, [props._id]);
 
   const onClickHandler = () => {
     const body = {
@@ -24,7 +12,7 @@ function Memo({ props }) {
       memo: props._id,
     };
 
-    if (cheer) {
+    if (isClicked) {
       axios.post("/api/cheers/cancel", body).then((response) => {
         if (response.data.success) {
           axios.put("/api/memos/update", body).then((response) => {
@@ -39,7 +27,7 @@ function Memo({ props }) {
         }
       });
     }
-    if (!cheer) {
+    if (!isClicked) {
       axios.post("/api/cheers", body).then((response) => {
         if (response.data.success) {
           axios.put("/api/memos/update", body).then((response) => {
@@ -83,7 +71,7 @@ function Memo({ props }) {
         >
           <div>응원 수 : {props.cheer}</div>
           <Button onClick={onClickHandler}>
-            {cheer ? "응원취소" : "응원하기"}
+            {isClicked ? "응원취소" : "응원하기"}
           </Button>
         </div>
       </div>

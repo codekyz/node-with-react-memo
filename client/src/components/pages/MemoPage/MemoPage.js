@@ -13,18 +13,22 @@ function MemoPage() {
   const [memo, setMemo] = useState("");
   const [memos, setMemos] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [isClicked, setIsClicked] = useState([]);
 
   useEffect(() => {
     if (!toggle) {
       axios.post("/api/memos/all").then((response) => {
         if (response.data.success) {
           setMemos(response.data.memoInfo);
+          onIsClickedHandler(memos);
         } else {
           alert("메모를 가져오는데 실패했습니다.");
         }
       });
     }
+  }, [toggle, memos]);
 
+  useEffect(() => {
     if (toggle) {
       const body = {
         id: user.userData._id,
@@ -32,12 +36,33 @@ function MemoPage() {
       axios.post("/api/memos/mymemo", body).then((response) => {
         if (response.data.success) {
           setMemos(response.data.myMemos);
+          onIsClickedHandler(memos);
         } else {
           alert("내 메모를 가져오는데 실패했습니다.");
         }
       });
     }
-  }, [toggle, user]);
+  }, [toggle, user, memos]);
+
+  const onIsClickedHandler = (memos) => {
+    if (memos) {
+      memos.map((item, index) => {
+        return axios
+          .post("/api/cheers/search", { memo: item._id })
+          .then((response) => {
+            if (response.data.success) {
+              const newArray = isClicked;
+              newArray[index] = true;
+              setIsClicked(newArray);
+            } else {
+              const newArray = isClicked;
+              newArray[index] = false;
+              setIsClicked(newArray);
+            }
+          });
+      });
+    }
+  };
 
   const onMemoHandler = (event) => {
     setMemo(event.currentTarget.value);
@@ -100,8 +125,8 @@ function MemoPage() {
       >
         내 메모만 보기
       </Checkbox>
-      {memos.map((item) => (
-        <Memo key={item._id} props={item} />
+      {memos.map((item, index) => (
+        <Memo key={item._id} props={item} isClicked={isClicked[index]} />
       ))}
     </div>
   );
