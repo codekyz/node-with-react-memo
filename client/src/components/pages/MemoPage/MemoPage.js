@@ -45,21 +45,22 @@ function MemoPage() {
   }, [toggle, user, memos]);
 
   const onIsClickedHandler = (memos) => {
+    if (isClicked.length === memos.length) {
+      return;
+    }
     if (memos) {
+      const newArray = Array(memos.length);
       memos.map((item, index) => {
-        return axios
+        axios
           .post("/api/cheers/search", { memo: item._id })
           .then((response) => {
             if (response.data.success) {
-              const newArray = isClicked;
               newArray[index] = true;
-              setIsClicked(newArray);
             } else {
-              const newArray = isClicked;
               newArray[index] = false;
-              setIsClicked(newArray);
             }
           });
+        return newArray;
       });
     }
   };
