@@ -37,7 +37,7 @@ function MemoPage() {
         }
       });
     }
-  }, [toggle, memos, user]);
+  }, [toggle, user]);
 
   const onMemoHandler = (event) => {
     setMemo(event.currentTarget.value);

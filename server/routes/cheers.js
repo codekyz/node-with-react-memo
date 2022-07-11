@@ -21,8 +21,8 @@ router.post("/search", (req, res) => {
   let o_memo_id = new ObjectId(req.body.memo);
   Cheer.findOne({ user: o_user_id, memo: o_memo_id }, (err, result) => {
     if (err) return res.status(400).json({ success: false, err });
-    if (result === null) return res.status(400).json({ success: false });
-    return res.status(200).json({ success: true, result });
+    if (result === null) return res.status(200).json({ success: false });
+    return res.status(200).json({ success: true });
   });
 });
 

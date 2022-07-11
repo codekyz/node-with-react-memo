@@ -23,7 +23,7 @@ function Memo({ props, index }) {
         }
       });
     }
-  }, []);
+  }, [props]);
 
   const onClickHandler = () => {
     const body = {
@@ -98,4 +98,4 @@ function Memo({ props, index }) {
   );
 }
 
-export default React.memo(Memo);
+export default Memo;
