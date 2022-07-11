@@ -13,20 +13,6 @@ function MemoPage() {
   const [memo, setMemo] = useState("");
   const [memos, setMemos] = useState([]);
   const [toggle, setToggle] = useState(false);
-  const [isClicked, setIsClicked] = useState([]);
-
-  useEffect(() => {
-    if (!toggle) {
-      axios.post("/api/memos/all").then((response) => {
-        if (response.data.success) {
-          setMemos(response.data.memoInfo);
-          onIsClickedHandler(memos);
-        } else {
-          alert("메모를 가져오는데 실패했습니다.");
-        }
-      });
-    }
-  }, [toggle, memos]);
 
   useEffect(() => {
     if (toggle) {
@@ -36,34 +22,22 @@ function MemoPage() {
       axios.post("/api/memos/mymemo", body).then((response) => {
         if (response.data.success) {
           setMemos(response.data.myMemos);
-          onIsClickedHandler(memos);
         } else {
           alert("내 메모를 가져오는데 실패했습니다.");
         }
       });
     }
-  }, [toggle, user, memos]);
 
-  const onIsClickedHandler = (memos) => {
-    if (isClicked.length === memos.length) {
-      return;
-    }
-    if (memos) {
-      const newArray = Array(memos.length);
-      memos.map((item, index) => {
-        axios
-          .post("/api/cheers/search", { memo: item._id })
-          .then((response) => {
-            if (response.data.success) {
-              newArray[index] = true;
-            } else {
-              newArray[index] = false;
-            }
-          });
-        return newArray;
+    if (!toggle) {
+      axios.post("/api/memos/all").then((response) => {
+        if (response.data.success) {
+          setMemos(response.data.memoInfo);
+        } else {
+          alert("메모를 가져오는데 실패했습니다.");
+        }
       });
     }
-  };
+  }, [toggle, memos, user]);
 
   const onMemoHandler = (event) => {
     setMemo(event.currentTarget.value);
@@ -93,6 +67,8 @@ function MemoPage() {
         alert("등록 실패");
       }
     });
+
+    setMemo("");
   };
   return (
     <div
@@ -127,7 +103,7 @@ function MemoPage() {
         내 메모만 보기
       </Checkbox>
       {memos.map((item, index) => (
-        <Memo key={item._id} props={item} isClicked={isClicked[index]} />
+        <Memo key={item._id} props={item} index={index} />
       ))}
     </div>
   );

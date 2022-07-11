@@ -3,8 +3,27 @@ import { Card, Button } from "antd";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function Memo({ props, isClicked }) {
+function Memo({ props, index }) {
   const user = useSelector((state) => state.user);
+  const [isClicked, setIsClicked] = useState([]);
+
+  useEffect(() => {
+    if (props) {
+      const body = {
+        user: user.userData._id,
+        memo: props._id,
+      };
+      axios.post("/api/cheers/search", body).then((response) => {
+        if (response.data.success) {
+          let newArr = isClicked.concat((isClicked[index] = true));
+          setIsClicked(newArr);
+        } else {
+          let newArr = isClicked.concat((isClicked[index] = false));
+          setIsClicked(newArr);
+        }
+      });
+    }
+  }, []);
 
   const onClickHandler = () => {
     const body = {
@@ -12,7 +31,7 @@ function Memo({ props, isClicked }) {
       memo: props._id,
     };
 
-    if (isClicked) {
+    if (isClicked[index]) {
       axios.post("/api/cheers/cancel", body).then((response) => {
         if (response.data.success) {
           axios.put("/api/memos/update", body).then((response) => {
@@ -27,7 +46,7 @@ function Memo({ props, isClicked }) {
         }
       });
     }
-    if (!isClicked) {
+    if (!isClicked[index]) {
       axios.post("/api/cheers", body).then((response) => {
         if (response.data.success) {
           axios.put("/api/memos/update", body).then((response) => {
@@ -71,7 +90,7 @@ function Memo({ props, isClicked }) {
         >
           <div>응원 수 : {props.cheer}</div>
           <Button onClick={onClickHandler}>
-            {isClicked ? "응원취소" : "응원하기"}
+            {isClicked[index] ? "응원취소" : "응원하기"}
           </Button>
         </div>
       </div>
@@ -79,4 +98,4 @@ function Memo({ props, isClicked }) {
   );
 }
 
-export default Memo;
+export default React.memo(Memo);

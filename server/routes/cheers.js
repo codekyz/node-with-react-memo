@@ -17,9 +17,12 @@ router.post("/", (req, res) => {
 });
 
 router.post("/search", (req, res) => {
-  Cheer.find({ memo: req.memo }, (err) => {
+  let o_user_id = new ObjectId(req.body.user);
+  let o_memo_id = new ObjectId(req.body.memo);
+  Cheer.findOne({ user: o_user_id, memo: o_memo_id }, (err, result) => {
     if (err) return res.status(400).json({ success: false, err });
-    return res.status(200).json({ success: true });
+    if (result === null) return res.status(400).json({ success: false });
+    return res.status(200).json({ success: true, result });
   });
 });
 
