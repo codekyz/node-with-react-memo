@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import Auth from "../../../hoc/auth";
 import { Typography, Button, Form, Input, Checkbox } from "antd";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Memo from "./Memo";
+import { requestAllMemo } from "../../../redux/memoSlice";
 
 const { Title } = Typography;
 
 function MemoPage() {
   const user = useSelector((state) => state.user);
+  const memo = useSelector((state) => state.memo);
+  const dispatch = useDispatch();
 
-  const [memo, setMemo] = useState("");
-  const [memos, setMemos] = useState([]);
+  const [memoValue, setMemoValue] = useState("");
+  // const [memos, setMemos] = useState({});
   const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
@@ -21,7 +24,7 @@ function MemoPage() {
       };
       axios.post("/api/memos/mymemo", body).then((response) => {
         if (response.data.success) {
-          setMemos(response.data.myMemos);
+          // setMemos(response.data.myMemos);
         } else {
           alert("내 메모를 가져오는데 실패했습니다.");
         }
@@ -29,10 +32,8 @@ function MemoPage() {
     }
 
     if (!toggle) {
-      axios.post("/api/memos/all").then((response) => {
-        if (response.data.success) {
-          setMemos(response.data.memoInfo);
-        } else {
+      dispatch(requestAllMemo()).then((response) => {
+        if (!response.payload.success) {
           alert("메모를 가져오는데 실패했습니다.");
         }
       });
@@ -40,7 +41,7 @@ function MemoPage() {
   }, [toggle, user]);
 
   const onMemoHandler = (event) => {
-    setMemo(event.currentTarget.value);
+    setMemoValue(event.currentTarget.value);
   };
 
   const onCheckBoxHandler = () => {
@@ -48,7 +49,7 @@ function MemoPage() {
   };
 
   const onSubmitHandler = () => {
-    if (!memo) {
+    if (!memoValue) {
       return alert("내용을 입력해주세요.");
     }
 
@@ -57,7 +58,7 @@ function MemoPage() {
     const body = {
       // 로그인된 사람의 정보
       writer: user.userData._id,
-      memo: memo,
+      memo: memoValue,
     };
 
     axios.post("/api/memos", body).then((response) => {
@@ -68,7 +69,7 @@ function MemoPage() {
       }
     });
 
-    setMemo("");
+    setMemoValue("");
   };
   return (
     <div
@@ -92,7 +93,7 @@ function MemoPage() {
         }}
         onFinish={onSubmitHandler}
       >
-        <Input type="text" value={memo} onChange={onMemoHandler} />
+        <Input type="text" value={memoValue} onChange={onMemoHandler} />
         <Button htmlType="submit">등록</Button>
       </Form>
       <Checkbox
@@ -102,9 +103,10 @@ function MemoPage() {
       >
         내 메모만 보기
       </Checkbox>
-      {memos.map((item, index) => (
-        <Memo key={item._id} props={item} index={index} />
-      ))}
+      {memo.allMemo.memoInfo &&
+        memo.allMemo.memoInfo.map((item, index) => (
+          <Memo key={item._id} props={item} index={index} />
+        ))}
     </div>
   );
 }
