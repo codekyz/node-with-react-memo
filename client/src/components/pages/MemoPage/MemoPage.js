@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Auth from "../../../hoc/auth";
 import { Typography, Button, Form, Input, Checkbox } from "antd";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Memo from "./Memo";
-import { requestAllMemo } from "../../../redux/memoSlice";
+import {
+  requestAllMemo,
+  requestMyMemo,
+  requestSubmitMemo,
+} from "../../../redux/memoSlice";
 
 const { Title } = Typography;
 
@@ -14,7 +17,6 @@ function MemoPage() {
   const dispatch = useDispatch();
 
   const [memoValue, setMemoValue] = useState("");
-  // const [memos, setMemos] = useState({});
   const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
@@ -22,10 +24,8 @@ function MemoPage() {
       const body = {
         id: user.userData._id,
       };
-      axios.post("/api/memos/mymemo", body).then((response) => {
-        if (response.data.success) {
-          // setMemos(response.data.myMemos);
-        } else {
+      dispatch(requestMyMemo(body)).then((response) => {
+        if (!response.payload.success) {
           alert("내 메모를 가져오는데 실패했습니다.");
         }
       });
@@ -61,8 +61,8 @@ function MemoPage() {
       memo: memoValue,
     };
 
-    axios.post("/api/memos", body).then((response) => {
-      if (response.data.success) {
+    dispatch(requestSubmitMemo(body)).then((response) => {
+      if (response.payload.success) {
         alert("등록 성공");
       } else {
         alert("등록 실패");
@@ -103,10 +103,15 @@ function MemoPage() {
       >
         내 메모만 보기
       </Checkbox>
-      {memo.allMemo.memoInfo &&
-        memo.allMemo.memoInfo.map((item, index) => (
-          <Memo key={item._id} props={item} index={index} />
-        ))}
+      {toggle
+        ? memo.myMemo.myMemos &&
+          memo.myMemo.myMemos.map((item, index) => (
+            <Memo key={item._id} props={item} index={index} />
+          ))
+        : memo.allMemo.memoInfo &&
+          memo.allMemo.memoInfo.map((item, index) => (
+            <Memo key={item._id} props={item} index={index} />
+          ))}
     </div>
   );
 }

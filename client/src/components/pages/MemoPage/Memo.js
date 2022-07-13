@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Card, Button } from "antd";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { requestUpdateMemo } from "../../../redux/memoSlice";
+import {
+  requestCancelCheer,
+  requestCheer,
+  requestSearchCheer,
+} from "../../../redux/cheerSlice";
 
 function Memo({ props, index }) {
   const user = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
   const [isClicked, setIsClicked] = useState([]);
 
   useEffect(() => {
@@ -13,8 +20,8 @@ function Memo({ props, index }) {
         user: user.userData._id,
         memo: props._id,
       };
-      axios.post("/api/cheers/search", body).then((response) => {
-        if (response.data.success) {
+      dispatch(requestSearchCheer(body)).then((response) => {
+        if (response.payload.success) {
           let newArr = isClicked.concat((isClicked[index] = true));
           setIsClicked(newArr);
         } else {
@@ -32,10 +39,10 @@ function Memo({ props, index }) {
     };
 
     if (isClicked[index]) {
-      axios.post("/api/cheers/cancel", body).then((response) => {
-        if (response.data.success) {
-          axios.put("/api/memos/update", body).then((response) => {
-            if (response.data.success) {
+      dispatch(requestCancelCheer(body)).then((response) => {
+        if (response.payload.success) {
+          dispatch(requestUpdateMemo(body)).then((response) => {
+            if (response.payload.success) {
               alert("응원하기 취소에 성공했습니다.");
             } else {
               alert("메모 업데이트에 실패했습니다.");
@@ -47,10 +54,10 @@ function Memo({ props, index }) {
       });
     }
     if (!isClicked[index]) {
-      axios.post("/api/cheers", body).then((response) => {
-        if (response.data.success) {
-          axios.put("/api/memos/update", body).then((response) => {
-            if (response.data.success) {
+      dispatch(requestCheer(body)).then((response) => {
+        if (response.payload.success) {
+          dispatch(requestUpdateMemo(body)).then((response) => {
+            if (response.payload.success) {
               alert("응원하기에 성공했습니다.");
             } else {
               alert("메모 업데이트에 실패했습니다.");
