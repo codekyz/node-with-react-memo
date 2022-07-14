@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button } from "antd";
+import { Card, Button, Input, Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { requestUpdateMemo } from "../../../redux/memoSlice";
 import {
@@ -13,7 +13,10 @@ function Memo({ props, index }) {
   const user = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
+
   const [isClicked, setIsClicked] = useState([]);
+  const [updateToggle, setUpdateToggle] = useState(false);
+  const [updateValue, setUpdateValue] = useState(props.memo);
 
   useEffect(() => {
     if (props) {
@@ -76,13 +79,36 @@ function Memo({ props, index }) {
       id: props._id,
     };
     axios.post("/api/memos/delete", body).then((response) => {
-      console.log(response.data);
       if (response.data.success) {
         alert("삭제 성공");
       } else {
         alert("삭제 실패");
       }
     });
+  };
+
+  const onUpdateHandler = () => {
+    setUpdateToggle(!updateToggle);
+  };
+
+  const onUpdateSubmitHandler = () => {
+    const body = {
+      memo: props._id,
+      memoValue: updateValue,
+    };
+
+    axios.put("/api/memos/update", body).then((response) => {
+      console.log(body, response);
+      if (response.data.success) {
+        alert("수정 성공");
+      } else {
+        alert("수정 실패");
+      }
+    });
+  };
+
+  const onUpdateMemoHandler = (event) => {
+    setUpdateValue(event.currentTarget.value);
   };
 
   return (
@@ -100,11 +126,30 @@ function Memo({ props, index }) {
         }}
       >
         <div>
-          <div>{props.memo}</div>
+          {updateToggle ? (
+            <Form
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                width: "100%",
+              }}
+              onFinish={onUpdateSubmitHandler}
+            >
+              <Input
+                type="text"
+                value={updateValue}
+                onChange={onUpdateMemoHandler}
+              />
+              <Button htmlType="submit">수정</Button>
+            </Form>
+          ) : (
+            <div>{props.memo}</div>
+          )}
           <div>작성자 : {props.writer.name}</div>
           {user.userData._id === props.writer._id && (
             <div>
-              <Button>수정하기</Button>
+              <Button onClick={onUpdateHandler}>수정하기</Button>
               <Button onClick={onDeleteHandler}>삭제하기</Button>
             </div>
           )}

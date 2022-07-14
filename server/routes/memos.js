@@ -39,12 +39,13 @@ router.post("/mymemo", (req, res) => {
 router.put("/update", (req, res) => {
   Cheer.countDocuments({ memo: req.body.memo }, (err, count) => {
     if (err) return err;
-    Memo.findByIdAndUpdate(req.body.memo, { cheer: count }).exec(
-      (err, memoInfo) => {
-        if (err) return res.status(400).json({ success: false, err });
-        return res.status(200).json({ success: true, memoInfo });
-      }
-    );
+    Memo.findByIdAndUpdate(req.body.memo, {
+      memo: req.body.memoValue,
+      cheer: count,
+    }).exec((err, memoInfo) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, memoInfo });
+    });
   });
 });
 
