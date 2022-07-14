@@ -48,4 +48,15 @@ router.put("/update", (req, res) => {
   });
 });
 
+router.post("/delete", (req, res) => {
+  let o_id = new ObjectId(req.body.id);
+  Memo.deleteOne({ _id: o_id }, (err) => {
+    if (err) return err;
+    Cheer.deleteMany({ memo: o_id }, (err, doc) => {
+      if (err) return res.status(400).json({ success: false, err });
+      return res.status(200).json({ success: true, doc });
+    });
+  });
+});
+
 module.exports = router;

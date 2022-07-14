@@ -7,6 +7,7 @@ import {
   requestCheer,
   requestSearchCheer,
 } from "../../../redux/cheerSlice";
+import axios from "axios";
 
 function Memo({ props, index }) {
   const user = useSelector((state) => state.user);
@@ -69,6 +70,21 @@ function Memo({ props, index }) {
       });
     }
   };
+
+  const onDeleteHandler = () => {
+    const body = {
+      id: props._id,
+    };
+    axios.post("/api/memos/delete", body).then((response) => {
+      console.log(response.data);
+      if (response.data.success) {
+        alert("삭제 성공");
+      } else {
+        alert("삭제 실패");
+      }
+    });
+  };
+
   return (
     <Card
       style={{
@@ -86,6 +102,12 @@ function Memo({ props, index }) {
         <div>
           <div>{props.memo}</div>
           <div>작성자 : {props.writer.name}</div>
+          {user.userData._id === props.writer._id && (
+            <div>
+              <Button>수정하기</Button>
+              <Button onClick={onDeleteHandler}>삭제하기</Button>
+            </div>
+          )}
         </div>
         <div
           style={{
